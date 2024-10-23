@@ -1,0 +1,53 @@
+import requests
+
+# Define your API key from OpenWeatherMap
+api_key = "207d0b461b12e9acd1e446329362b761" # Replace with your OpenWeatherMap API key
+
+# Location and URL setup
+location = "Amsterdam,NL"  # Replace with your desired city/country
+#Can we change cities.. add input
+url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric"
+
+# Make the request to get the current weather
+response = requests.get(url)
+
+# Check if the request was successful
+if response.status_code == 200:
+    data = response.json()  # Parse the JSON response
+
+    # Check if the 'main' key is in the response
+    if 'main' in data:
+        # Extract the weather data
+        temp_min = data['main']['temp_min']
+        temp_max = data['main']['temp_max']
+        precipitation = data['weather'][0]['description']  # Description of the weather
+
+        # Print out the current weather information
+        print(f"Today's weather in {location}:")
+        print(f"Minimum temperature: {temp_min}°C")
+        print(f"Maximum temperature: {temp_max}°C")
+        print(f"Weather description: {precipitation}")
+
+        # Give clothing advice based on temperature
+        if temp_max < 18:
+            print("It looks like it's below 18°C. You should wear pants today.") #
+        else:
+            print("It's warm enough! Shorts or a skirt would be fine today.")
+
+        # Check for precipitation in the weather description
+        if 'rain' in precipitation.lower() or 'drizzle' in precipitation.lower() or 'snow' in precipitation.lower():
+            print("Remember to take an umbrella with you today. There might be precipitation.")
+        else:
+            print("No rain expected. You're good without an umbrella!")
+    else:
+        print(f"Unexpected data structure: {data}")
+else:
+    print(f"Failed to retrieve data. St-atus code: {response.status_code}")
+    print(f"Response: {response.text}")
+
+"""
+print time
+display the logos.
+add colors
+
+"""
